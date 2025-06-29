@@ -268,17 +268,15 @@ const SearchBox = forwardRef(
             <SearchBoxContainer
                 ref={ref}
                 id='searchBox'
-                aria-label={intl.formatMessage({
-                    id: 'search_bar.search',
-                    defaultMessage: 'Search',
-                })}
-                aria-describedby='searchHints'
-                role='searchbox'
             >
                 <CloseIcon
                     data-testid='searchBoxClose'
                     className='btn btn-icon btn-m'
                     onClick={closeHandler}
+                    aria-label={intl.formatMessage({
+                        id: 'search_bar.close',
+                        defaultMessage: 'Close',
+                    })}
                 >
                     <i className='icon icon-close'/>
                 </CloseIcon>
