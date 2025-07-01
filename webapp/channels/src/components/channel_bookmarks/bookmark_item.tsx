@@ -64,23 +64,15 @@ const useBookmarkLink = (bookmark: ChannelBookmark) => {
     let link;
 
     if (bookmark.type === 'link' && bookmark.link_url) {
+        // Determine if it's an in-app link based on URL scheme
+        const isInAppLink = !bookmark.link_url.startsWith('http://') && !bookmark.link_url.startsWith('https://');
+        
         link = (
             <DynamicLink
                 href={bookmark.link_url}
                 ref={linkRef}
                 isFile={false}
-            >
-                {icon}
-                <Label>{bookmark.display_name}</Label>
-            </DynamicLink>
-        );
-    } else if (bookmark.type === 'inapp_link' && bookmark.link_url) {
-        link = (
-            <DynamicLink
-                href={bookmark.link_url}
-                ref={linkRef}
-                isFile={false}
-                isInAppLink={true}
+                isInAppLink={isInAppLink}
             >
                 {icon}
                 <Label>{bookmark.display_name}</Label>

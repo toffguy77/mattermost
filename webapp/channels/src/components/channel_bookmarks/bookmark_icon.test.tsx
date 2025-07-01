@@ -29,18 +29,7 @@ describe('components/channel_bookmarks/bookmark_icon', () => {
         expect(wrapper).toMatchSnapshot();
     });
 
-    test('should match snapshot for in-app link bookmark', () => {
-        const props = {
-            ...baseProps,
-            type: 'inapp_link' as const,
-        };
-        const wrapper = shallow(<BookmarkIcon {...props}/>);
-        expect(wrapper).toMatchSnapshot();
-        
-        // Verify that the in-app link icon has a different color
-        const icon = wrapper.find('BookOutlineIcon');
-        expect(icon.prop('color')).toBe('var(--button-bg)');
-    });
+
 
     test('should match snapshot with emoji', () => {
         const props = {

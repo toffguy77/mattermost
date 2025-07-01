@@ -14,7 +14,7 @@ type ChannelBookmarkType string
 const (
         ChannelBookmarkLink     ChannelBookmarkType = "link"
         ChannelBookmarkFile     ChannelBookmarkType = "file"
-        ChannelBookmarkInAppLink ChannelBookmarkType = "inapp_link"
+
         BookmarkFileOwner                           = "bookmark"
         MaxBookmarksPerChannel                      = 50
         DisplayNameMaxRunes                         = 64
@@ -99,11 +99,11 @@ func (o *ChannelBookmark) IsValid() *AppError {
                 return NewAppError("ChannelBookmark.IsValid", "model.channel_bookmark.is_valid.display_name.app_error", nil, "", http.StatusBadRequest)
         }
 
-        if !(o.Type == ChannelBookmarkFile || o.Type == ChannelBookmarkLink || o.Type == ChannelBookmarkInAppLink) {
+        if !(o.Type == ChannelBookmarkFile || o.Type == ChannelBookmarkLink) {
                 return NewAppError("ChannelBookmark.IsValid", "model.channel_bookmark.is_valid.type.app_error", nil, "id="+o.Id, http.StatusBadRequest)
         }
 
-        if (o.Type == ChannelBookmarkLink || o.Type == ChannelBookmarkInAppLink) && o.FileId != "" {
+        if o.Type == ChannelBookmarkLink && o.FileId != "" {
                 return NewAppError("ChannelBookmark.IsValid", "model.channel_bookmark.is_valid.file_id.missing_or_invalid.app_error", nil, "id="+o.Id, http.StatusBadRequest)
         }
 
@@ -111,12 +111,8 @@ func (o *ChannelBookmark) IsValid() *AppError {
                 return NewAppError("ChannelBookmark.IsValid", "model.channel_bookmark.is_valid.link_url.missing_or_invalid.app_error", nil, "id="+o.Id, http.StatusBadRequest)
         }
 
-        if o.Type == ChannelBookmarkLink && (o.LinkUrl == "" || !IsValidHTTPURL(o.LinkUrl) || utf8.RuneCountInString(o.LinkUrl) > LinkMaxRunes) {
+        if o.Type == ChannelBookmarkLink && (o.LinkUrl == "" || (!IsValidHTTPURL(o.LinkUrl) && !IsValidAppSchemeURL(o.LinkUrl)) || utf8.RuneCountInString(o.LinkUrl) > LinkMaxRunes) {
                 return NewAppError("ChannelBookmark.IsValid", "model.channel_bookmark.is_valid.link_url.missing_or_invalid.app_error", nil, "id="+o.Id, http.StatusBadRequest)
-        }
-        
-        if o.Type == ChannelBookmarkInAppLink && (o.LinkUrl == "" || !IsValidAppSchemeURL(o.LinkUrl) || utf8.RuneCountInString(o.LinkUrl) > LinkMaxRunes) {
-                return NewAppError("ChannelBookmark.IsValid", "model.channel_bookmark.is_valid.inapp_link_url.missing_or_invalid.app_error", nil, "id="+o.Id, http.StatusBadRequest)
         }
 
         if o.Type == ChannelBookmarkLink && o.ImageUrl != "" && (!IsValidHTTPURL(o.ImageUrl) || utf8.RuneCountInString(o.ImageUrl) > LinkMaxRunes) {

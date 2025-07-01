@@ -59,7 +59,7 @@ describe('components/channel_bookmarks/bookmark_item', () => {
             ...baseProps,
             bookmark: {
                 ...baseProps.bookmark,
-                type: 'inapp_link' as const,
+                type: 'link' as const,
                 link_url: 'mattermost://channel/team-name/channel-name',
             },
         };
